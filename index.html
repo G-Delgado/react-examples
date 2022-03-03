@@ -94,10 +94,67 @@
     // --------------------------------------------------
     // --------------------------------------------------
 
+    class Timerv2 extends React.Component {
+        constructor(props) {
+            super(props);
+             this.state = { hours: 0, minutes: 0, seconds: 0 };
+        }
+
+        tick() {
+            
+            if ((this.state.seconds + 1) % 10 == 0 && this.state.seconds != 0) {
+                if ((this.state.minutes + 1) % 10 == 0 && this.state.minutes != 0) {
+                    this.setState(state => ({
+                        hours: state.hours + 1,
+                        minutes: 0,
+                        seconds: 0
+                    }));
+                } else {
+                    this.setState(state => ({
+                        minutes: state.minutes + 1,
+                        seconds: 0
+                    }));
+                }
+            } else {
+                this.setState(state => ({
+                    seconds: state.seconds + 1
+                }));
+            } 
+        }
+
+        componentDidMount() {
+            this.interval = setInterval(() => this.tick(), 1000);
+        }
+
+        componentWillUnmount() {
+            clearInterval(this.interval);
+        }
+
+        render() {
+            return (
+                <div>
+                    {this.state.hours} : {this.state.minutes} : {this.state.seconds}
+                </div>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <Timerv2 />,
+        document.getElementById("timerv2")
+    )
+
+    // --------------------------------------------------
+    // --------------------------------------------------
+    // --------------------------------------------------
+
     class TodoApp extends React.Component {
         constructor(props) {
             super(props);
-            this.state = { items: [], text: '' };
+            this.state = { letters: [
+                'A','B','C','D','E','F','G','H','I','J',
+                'K','L','M','N','O','P','Q','R','S','T',
+                'U','V','W','X','Y','Z'], items: [], text: '' };
             this.handleChange = this.handleChange.bind(this);
             this.handleSubmit = this.handleSubmit.bind(this);
         }
@@ -117,7 +174,7 @@
                     value={this.state.text}
                 />
                 <button>
-                    Add #{this.state.items.length + 1}
+                    Add #{this.state.letters[this.state.items.length]}
                 </button>
                 </form>
             </div>
@@ -133,7 +190,12 @@
             if (this.state.text.length === 0) {
             return;
             }
+
+            if (this.state.items.length == this.state.letters.length) {
+                alert("Maximo añadido!")
+            } else {
             const newItem = {
+            letter: this.state.letters[this.state.items.length] + ".",
             text: this.state.text,
             id: Date.now()
             };
@@ -141,6 +203,9 @@
             items: state.items.concat(newItem),
             text: ''
             }));
+            }
+
+
         }
         }
 
@@ -149,7 +214,7 @@
             return (
             <ul>
                 {this.props.items.map(item => (
-                <li key={item.id}>{item.text}</li>
+                <li key={item.id} style={{listStyleType: "none"}}>{item.letter}{item.text}</li>
                 ))}
             </ul>
             );

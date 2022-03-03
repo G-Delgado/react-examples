@@ -25,14 +25,14 @@
         render() {
           return (
             <div>
-              Hello {this.props.name}
+              Hola {this.props.name}
             </div>
           );
         }
       }
       
       ReactDOM.render(
-        <HelloMessage name="Taylor" />,
+        <HelloMessage name="Gabriel" />,
         document.getElementById('root')
       );
 
@@ -40,16 +40,32 @@
       // --------------------------------------------------
       // --------------------------------------------------
 
-    class Timer extends React.Component {
+      class Timer extends React.Component {
         constructor(props) {
             super(props);
-             this.state = { seconds: 0 };
+             this.state = { hours: 0, minutes: 0, seconds: 0 };
         }
 
         tick() {
-            this.setState(state => ({
-            seconds: state.seconds + 1
-            }));
+            
+            if (this.state.seconds == 59) {
+                if (this.state.minutes == 59) {
+                    this.setState(state => ({
+                        hours: state.hours + 1,
+                        minutes: 0,
+                        seconds: 0
+                    }));
+                } else {
+                    this.setState(state => ({
+                        minutes: state.minutes + 1,
+                        seconds: 0
+                    }));
+                }
+            } else {
+                this.setState(state => ({
+                    seconds: state.seconds + 1
+                }));
+            } 
         }
 
         componentDidMount() {
@@ -63,7 +79,7 @@
         render() {
             return (
                 <div>
-                    Seconds: {this.state.seconds}
+                    {this.state.hours} : {this.state.minutes} : {this.state.seconds}
                 </div>
             );
         }
